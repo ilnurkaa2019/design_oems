@@ -37,7 +37,7 @@ keys_qp = {
 }
 
 df = pd.read_excel('db_applications.xlsx')
-df['Дата'] = df['Дата'].astype('datetime64')
+df['Дата'] = df['Дата'].astype('datetime64[ns]')
 st.html('nav_bar.html')
 filter_names = ['date','stations','host','type','status']
 
@@ -92,7 +92,7 @@ if b_st:
 
 filter_container = main_.container(border=True)
 filter_container.write('Выбрать фильтр:')
-date_col, station_col, host_col, type_col, status_col, _ = filter_container.columns([1,1,1,1,1,3])
+date_col, station_col, host_col, type_col, status_col, _ = filter_container.columns([2,1,1,1,1,2])
 filter_params = [
     date_col.date_input('Дата', [df['Дата'].min(),df['Дата'].max()],format="YYYY-MM-DD", key=filter_names[0]),
     station_col.selectbox('Станция',sorted(list(set(['-'] + df['Станция'].to_list()))), key=filter_names[1]),
