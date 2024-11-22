@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Навигация</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Ubuntu, sans-serif;
+      font-size: 26px
+    }
+
+    .navbar {
+
+      display: flex;
+      margin-left: 0px;
+      justify-content: space-between;
+      align-items: center;
+      padding-left: 10px;
+      padding-right: 20px;
+      list-style: none;
+      margin-left: 0px;
+      border-block-end: 3px solid #aaaaaa
+    }
+
+    .navbar .nav-left,
+    .navbar .nav-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar a {
+      display: block;
+      padding-left:40px;
+      padding-right:40px;
+      margin: 0px;
+      text-decoration: none;
+      color: #333;
+      text-align: center;
+
+    }
+
+    .navbar a:hover {
+      border-block-end: 3px solid #074ee8;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="/dashboard">Дашборд</a>
+        <a href="/applications">Заявки</a>
+        <a href="/stations">Станции</a>
+        <a>Отчёты</a>
+        <a>База знаний</a>
+      </div>
+      <div class="nav-right">
+        <a>Замарашко Р.Н.</a>
+        <a>Выйти</a>
+      </div>
+    </nav>
+  </header>
+</body>
+</html>
