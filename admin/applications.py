@@ -14,8 +14,8 @@ def not_found_filter():
 def df_filter(df, key=None, value=None):
     if key and value:
         if key == 'find':
-            if len(df[df.eq(value).any(1)]):
-                return df[df.eq(value).any(1)]
+            if len(df[df.eq(value).any(axis=1)]):
+                return df[df.eq(value).any(axis=1)]
             else:
                 not_found_filter()
         elif len(df.loc[df[key] == value]):
@@ -74,6 +74,7 @@ df_redactor(df)
 
 if menu_switch:
     st.session_state.sidebar_state = not b_st
+    st.rerun()
 if b_st:
     if sb.button('Все', use_container_width=True):
         st.query_params.clear()
