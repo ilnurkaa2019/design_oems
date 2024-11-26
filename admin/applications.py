@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+import re
 
 def df_redactor(df):
     df['Создатель'].loc[df['Создатель'] == usr] = 'Я'
@@ -31,7 +32,7 @@ keys_qp = {
     'executer':'Исполнитель',
     'date':'Дата',
     'stations':'Станция',
-    'host':'Владелец',
+    'owner':'Владелец',
     'type':'Тип заявки',
     'status':'Статус'
 }
@@ -39,7 +40,7 @@ keys_qp = {
 df = pd.read_excel('db_applications.xlsx')
 df['Дата'] = df['Дата'].astype('datetime64[ns]')
 st.html('nav_bar.html')
-filter_names = ['date','stations','host','type','status']
+filter_names = ['date','stations','owner','type','status']
 
 if 'sidebar_state' not in st.session_state:
     st.session_state.sidebar_state = True
@@ -93,11 +94,11 @@ if b_st:
 
 filter_container = main_.container(border=True)
 filter_container.write('Выбрать фильтр:')
-date_col, station_col, host_col, type_col, status_col, _ = filter_container.columns([2,1,1,1,1,2])
+date_col, station_col, owner_col, type_col, status_col, _ = filter_container.columns([2,1,1,1,1,2])
 filter_params = [
     date_col.date_input('Дата', [df['Дата'].min(),df['Дата'].max()],format="YYYY-MM-DD", key=filter_names[0]),
     station_col.selectbox('Станция',sorted(list(set(['-'] + df['Станция'].to_list()))), key=filter_names[1]),
-    host_col.selectbox('Владелец',sorted(list(set(['-'] + df['Владелец'].to_list()))), key=filter_names[2]),
+    owner_col.selectbox('Владелец',sorted(list(set(['-'] + df['Владелец'].to_list()))), key=filter_names[2]),
     type_col.selectbox('Тип',sorted(list(set(['-'] + df['Тип заявки'].to_list()))), key=filter_names[3]),
     status_col.selectbox('Статус',sorted(list(set(['-'] + df['Статус'].to_list()))), key=filter_names[4]),
 ]
