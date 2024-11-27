@@ -1,11 +1,11 @@
 import streamlit as st
 import pandas as pd
-print(1, st.session_state)
 @st.dialog('По указанным критериям ничего не найдено')
 def not_found_filter():
     st.query_params.clear()
     if st.button('Принять', key='empty_table'):
         st.session_state.clean_flag = True
+        st.rerun()
 def df_filter(df, key=None, value=None):
     if key and value:
         if key == 'find':
