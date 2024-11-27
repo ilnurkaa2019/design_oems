@@ -106,31 +106,31 @@ iter_col = [station_col, name_type_col, owner_col, status_col, values_col, actio
 for index_col, col_name in enumerate(col_names):
     iter_col[index_col].write(col_name)
 try:
-    if df_stations == None:
-        not_found_filter()
+    if len(df_stations):
+        
+        for index_row, row in df_stations.iterrows():
+            container_station = main_.container(border=True)
+            iter_col = [station_col, name_type_col, owner_col, status_col, values_col, action_col] = container_station.columns([1, 1, 1, 1, 2, 2])
+            for index_col, col_name in enumerate(col_names):
+                if col_name == 'Станция':
+                    iter_col[index_col].checkbox(row[col_name], key=f"station_choose_button_{index_row}")  
+                elif col_name == 'Быстрые действия':
+                    iter_col[index_col].pills('station_button_quick_action',['🗨️','🔄','🔲','🖥️','📖','⚙️'], key=f'station_button_quick_action_{index_row}', label_visibility='hidden')
+                else:
+                    iter_col[index_col].write(row[col_name])
+            if st.session_state[f"station_choose_button_{index_row}"]:
+                df = df_connectors.loc[(df_connectors['Станция'] == df_stations['Станция'][index_row]) & (df_connectors['Владелец'] == df_stations['Владелец'][index_row])]
+                container_connector_out = main_.container(border=True)
+                for index_row_ext, row_ext in df.iterrows():
+                    container_connector_in = container_connector_out.container()
+                    iter_col = [station_col, name_type_col, owner_col, status_col, values_col, action_col] = container_connector_in.columns([1, 1, 1, 1, 2, 2])
+                    for index_col_ext, col_name_ext in enumerate(col_names):
+                        
+                        if col_name_ext == 'Быстрые действия':
+                            iter_col[index_col_ext].pills(row_ext['Название/Тип'],['🗨️','▶️','↗️'], key=f'connector_button_quick_action_{index_row}_{index_row_ext}')
+                        elif index_col_ext:
+                            iter_col[index_col_ext].write(row_ext[col_name_ext])
+                        else:
+                            iter_col[index_col_ext].write(index_row_ext-index_row*3+1)
 except:
-    for index_row, row in df_stations.iterrows():
-        container_station = main_.container(border=True)
-        iter_col = [station_col, name_type_col, owner_col, status_col, values_col, action_col] = container_station.columns([1, 1, 1, 1, 2, 2])
-        for index_col, col_name in enumerate(col_names):
-            if col_name == 'Станция':
-                iter_col[index_col].checkbox(row[col_name], key=f"station_choose_button_{index_row}")  
-            elif col_name == 'Быстрые действия':
-                iter_col[index_col].pills('station_button_quick_action',['🗨️','🔄','🔲','🖥️','📖','⚙️'], key=f'station_button_quick_action_{index_row}', label_visibility='hidden')
-            else:
-                iter_col[index_col].write(row[col_name])
-        if st.session_state[f"station_choose_button_{index_row}"]:
-            df = df_connectors.loc[(df_connectors['Станция'] == df_stations['Станция'][index_row]) & (df_connectors['Владелец'] == df_stations['Владелец'][index_row])]
-            container_connector_out = main_.container(border=True)
-            for index_row_ext, row_ext in df.iterrows():
-                container_connector_in = container_connector_out.container()
-                iter_col = [station_col, name_type_col, owner_col, status_col, values_col, action_col] = container_connector_in.columns([1, 1, 1, 1, 2, 2])
-                for index_col_ext, col_name_ext in enumerate(col_names):
-                    
-                    if col_name_ext == 'Быстрые действия':
-                       print(f'connector_button_quick_action_{index_row}_{index_row_ext}')
-                       iter_col[index_col_ext].pills(row_ext['Название/Тип'],['🗨️','▶️','↗️'], key=f'connector_button_quick_action_{index_row}_{index_row_ext}')
-                    elif index_col_ext:
-                        iter_col[index_col_ext].write(row_ext[col_name_ext])
-                    else:
-                        iter_col[index_col_ext].write(index_row_ext-index_row*3+1)
+    pass

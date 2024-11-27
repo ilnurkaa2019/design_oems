@@ -54,17 +54,19 @@ sb = sidebar.container(border=b_st)
 menu_switch = sb.button(("<< Hide menu" if b_st else "Open menu >>"), use_container_width=b_st)
 
 main_find, _ = main_.columns([1,7])
-if 'search_input' in st.session_state and st.session_state.clean_flag:
+if st.session_state.clean_flag:
     st.session_state.clean_flag = False
     st.query_params.clear()
-    if st.session_state.search_input:
-        st.session_state.search_input = None
+    
+    if 'search_input' in st.session_state:
+        if st.session_state.search_input:
+            st.session_state.search_input = None
     for i in filter_names:
         if i != 'date':
             st.session_state[i]='-'
         else:
             st.session_state[i] = df['Дата'].min(), df['Дата'].max()
-
+print(st.session_state)
 db_search = main_find.text_input('Введите значение:', placeholder='Поиск...', key='search_input')
 
 
@@ -80,11 +82,10 @@ if b_st:
     if sb.button('Все', use_container_width=True):
         st.query_params.clear()
         st.session_state.clean_flag = True
+        st.rerun()
     if sb.button('Созданные мной', use_container_width=True):
-        st.query_params.clear()
         st.query_params['creator'] = 'Я'
     if sb.button('Я исполнитель', use_container_width=True):
-        st.query_params.clear()
         st.query_params['executer'] = 'Я'
 
 # for key, value in st.query_params.items():
@@ -110,11 +111,12 @@ for index, f in enumerate(filter_params):
         if filter_names[index] in st.query_params:
             del st.query_params[filter_names[index]]
 
-
-
-    # if filter_container.button('Принять', key='filter_accept'):
-for key, value in st.query_params.items():
-    df = df_filter(df, key=(keys_qp[key] if key in keys_qp else key), value=value)
+for key, value in list(st.query_params.items()):
+    try:
+        if len(df):
+            df = df_filter(df, key=(keys_qp[key] if key in keys_qp else key), value=value)
+    except:
+        pass
 if filter_container.button('Сбросить', key='filter_cleaner'):
     st.session_state.clean_flag = True
     st.rerun()
